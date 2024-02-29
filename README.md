@@ -21,7 +21,7 @@ To proceed with the task, we will need the following reports:
 
 Please note that due to data sensitivity, I cannot upload these reports. However, if you wish to see the automation running and the output files, you can contact me so that we can proceed with the task promptly.
 
-# Code Explaination:
+# Code Explanation:
 This script is designed to automate the process of comparing two reports, SUNAT and SAP VIM, and identifying any discrepancies between them, specifically missing invoices in the SAP VIM report. The script performs the following steps:
 
 1. Checks the version of the script and alerts the user if it is outdated.
