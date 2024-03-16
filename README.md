@@ -41,3 +41,9 @@ This script is designed to automate the process of comparing two reports, SUNAT 
 15. Saves the identified missing invoices as an Excel file and creates email notifications for missing invoices with and without email addresses.
 
 The script uses several Python libraries, including pandas, os, glob, datetime, and win32com.client for handling files, data manipulation, and email notifications. It also includes error handling and logging functionalities to ensure smooth execution and traceability.
+
+# Outcome Achieved:
+1. Significant reduction in rejection rates and payment delays.
+2. Vendors were promptly notified of missing invoices, allowing them to resubmit documents in a timely manner.
+3. This automation led to improved invoice processing efficiency and increased vendor compliance, ultimately resulting in smoother operations and fewer payment postponements.
+4. Approximately 554 notification reminders have been sent to vendors so far.
