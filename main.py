@@ -6,18 +6,18 @@ import glob
 import sys
 import win32com.client as win32
 
-# Setting variables to check is this version matches with the GSS Automation Team's control
-application = "ITP_SUNET Vendor Notifications"
-version = "v01"
+## Setting variables to check is this version matches with the GSS Automation Team's control
+# application = "ITP_SUNET Vendor Notifications"
+# version = "v01"
 user_name = os.getlogin()
-path = f"C:/Users/{user_name}/Box/Automation Script Versions/versions.xlsx"
-df = pd.read_excel(path)
-filter_criteria = (df['app'] == application) & (df['versão'] == version)
-start_time = None
-
-if not filter_criteria.any():
-    input('Outdated app, talk to the automation team. Press ENTER to close the code \n')
-    quit()
+# path = f"C:/Users/{user_name}/Box/Automation Script Versions/versions.xlsx"
+# df = pd.read_excel(path)
+# filter_criteria = (df['app'] == application) & (df['versão'] == version)
+# start_time = None
+#
+# if not filter_criteria.any():
+#     input('Outdated app, talk to the automation team. Press ENTER to close the code \n')
+#     quit()
 
 # Disable openpyxl's UserWarning about default style
 warnings.filterwarnings("ignore", category=UserWarning, module="openpyxl.styles.stylesheet")
@@ -27,7 +27,7 @@ today = date.today()
 # Format today's date in the desired format
 date_format = today.strftime("%Y%m%d")
 # Define the path to the subfolder using today's date
-subfolder_path = f"C:/Users/csenosha/Anglo American/GSS Automation Team - Automation - Bot Dependencies/LAT_AP_PERU ITP/{date_format}"
+subfolder_path = f"C:/Users/{user_name}/Anglo American/GSS Automation Team - Automation - Bot Dependencies/LAT_AP_PERU ITP/{date_format}"
 # subfolder_path = f"C:/Users/Public/Documents/LAT_ITP_SUNET Vendor Notifications/{date_format}"
 
 # Get the path of the directory where the script is located
@@ -100,7 +100,7 @@ except Exception as e:
     print(f"Error while saving merged data: {e}")
 
 # Directory where the SAP reports are stored.
-directory_path = f"C:/Users/csenosha/Anglo American/GSS Automation Team - Automation - Bot Dependencies/LAT_AP_PERU ITP/{date_format}/SAP Reports"
+directory_path = f"C:/Users/{user_name}/Anglo American/GSS Automation Team - Automation - Bot Dependencies/LAT_AP_PERU ITP/{date_format}/SAP Reports"
 # directory_path = f"C:/Users/Public/Documents/LAT_ITP_SUNET Vendor Notifications/{date_format}/SAP Reports"
 # Get a list of all Excel files in the directory
 excel_files = glob.glob(os.path.join(directory_path, '*.xlsx'))
@@ -127,7 +127,8 @@ column_translation_dict = {
     'DP Document Type': 'Clase doc. PD',
     'Credit Memo': 'Abono',
     'Reference': 'Referencia',
-    'Vendor': 'Proveedor',
+    'Supplier': 'Proveedor',
+    # 'Vendor': 'Proveedor',
     'Total Amt in Doc Curr': 'Im. total en mon. doc',
     'Doc Currency': 'Moneda de documento',
     'Amt in Report Currency': 'Importe moneda informe',
@@ -180,7 +181,7 @@ if excel_files:
     # Read the most recently modified Excel file, if there are, we read the most recently modified one
     most_recent_file = excel_files[0]
     Sap_vim_report = pd.read_excel(most_recent_file, engine='openpyxl')
-    Sap_vim_report.to_excel(f"C:/Users/csenosha/Anglo American/GSS Automation Team - Automation - Bot Dependencies/LAT_AP_PERU ITP/{date_format}/SAP Reports/SAP_VIM_Report.xlsx", index=False)
+    Sap_vim_report.to_excel(f"C:/Users/{user_name}/Anglo American/GSS Automation Team - Automation - Bot Dependencies/LAT_AP_PERU ITP/{date_format}/SAP Reports/SAP_VIM_Report.xlsx", index=False)
     # Sap_vim_report.to_excel(f"C:/Users/Public/Documents/LAT_ITP_SUNET Vendor Notifications/{date_format}/SAP Reports/SAP_VIM_Report.xlsx", index=False)
     print(f"Processing {most_recent_file}\n")
 else:
@@ -188,9 +189,9 @@ else:
 
 # Load the SUNAT report, SAP Vim report and Vendor Codes spreadsheet into pandas DataFrames
 sunat_report = pd.read_excel(os.path.join(subfolder_path, 'merged_data.xlsx'))
-vendor_codes_sap = pd.read_excel(r'C:\Users\csenosha\Anglo American\GSS Automation Team - Automation - Bot Dependencies\LAT_AP_PERU ITP\Dependencies\Base Peru - RUC Codigo Proveedores.xlsx')
+vendor_codes_sap = pd.read_excel(fr'C:/Users/{user_name}/Anglo American/GSS Automation Team - Automation - Bot Dependencies/LAT_AP_PERU ITP/Dependencies/Base Peru - RUC Codigo Proveedores.xlsx')
 # vendor_codes_sap = pd.read_excel(r'C:\Users\Public\Documents\LAT_ITP_SUNET Vendor Notifications\Dependencies\Base Peru - RUC Codigo Proveedores.xlsx')
-sap_vim_report = pd.read_excel(f"C:/Users/csenosha/Anglo American/GSS Automation Team - Automation - Bot Dependencies/LAT_AP_PERU ITP/{date_format}/SAP Reports/SAP_VIM_Report.xlsx")
+sap_vim_report = pd.read_excel(f"C:/Users/{user_name}/Anglo American/GSS Automation Team - Automation - Bot Dependencies/LAT_AP_PERU ITP/{date_format}/SAP Reports/SAP_VIM_Report.xlsx")
 # sap_vim_report = pd.read_excel(f"C:/Users/Public/Documents/LAT_ITP_SUNET Vendor Notifications/{date_format}/SAP Reports/SAP_VIM_Report.xlsx")
 
 # Group vendor codes by RUC number
@@ -227,7 +228,7 @@ sunat_report['SAP Vendor Code'] = sunat_report['Número  documento de identidad 
 
 # Update the column name from 'Reference' to 'Referencia', 'Vendor' to 'Proveedor'
 sap_vim_report.rename(columns={'Reference': 'Referencia'}, inplace=True)
-sap_vim_report.rename(columns={'Vendor': 'Proveedor'}, inplace=True)
+sap_vim_report.rename(columns={'Supplier': 'Proveedor'}, inplace=True)
 
 
 # This line of code processes each element in the 'Referencia' column of the sap_vim_report DataFrame, extracting and converting numeric parts of the string values, and replacing non-numeric or invalid values with None.
@@ -246,7 +247,7 @@ sunat_report['Concatenated Field'] = sunat_report['SAP Vendor Code'].astype(str)
 sap_vim_report['concatenated field'] = sap_vim_report['Proveedor'].fillna('').astype(str) + sap_vim_report['Referencia'].apply(lambda x: str(int(x)) if pd.notnull(x) else '').astype(str)
 
 # Load Vendors email list spreadsheet
-vendors_email_list = pd.read_excel(r'C:/Users/csenosha/Anglo American/GSS Automation Team - Automation - Bot Dependencies/LAT_AP_PERU ITP/Dependencies\Vendors_emails_list.xlsx')
+vendors_email_list = pd.read_excel(fr'C:/Users/{user_name}/Anglo American/GSS Automation Team - Automation - Bot Dependencies/LAT_AP_PERU ITP/Dependencies\Vendors_emails_list.xlsx')
 # vendors_email_list = pd.read_excel(r'C:\Users\Public\Documents\LAT_ITP_SUNET Vendor Notifications\Dependencies\Vendors_emails_list.xlsx')
 # Merge the 'vendors_email_list'  with 'sunat_report' to add the 'Vendor Email' column
 sunat_report = sunat_report.merge(vendors_email_list, how='left', left_on='SAP Vendor Code', right_on='Proveedor')
@@ -354,13 +355,12 @@ email_body = f"""
 </body>
 """
 email.HTMLBody = email_body
-email.To = 'breno.andrade@angloamerican.com'
+email.To = 'banele.madikane@angloamerican.com'
 
 # Attach the log file
 attachment = os.path.abspath(log_file_path)
 email.Attachments.Add(attachment)
 email.Send()
-
 
 
 
